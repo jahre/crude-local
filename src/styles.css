@@ -1,1 +1,281 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+    background: #efefef;
+    margin: 0;
+}
+.content {
+    background: #fff;
+    max-width: 816px;
+    min-height: 100vh;
+    margin: 0 auto;
+    box-shadow: 0 0 0 1px #d1d1d1, 0 0 4px 1px #ccc;
+    box-sizing: border-box;
+    padding: 1px 0;
+}
+.container {
+    max-width: 620px;
+    margin: auto;
+    padding: 1px 5px;
+}
+.item {
+    width: 100%;
+    background: #f3f7fb;
+    /* border: 1px solid transparent; */
+    border-radius: 5px;
+    box-sizing: border-box; 
+    position: relative;
+    /* transition: all 0.5s ease-in; */
+}
+.textarea:hover{
+    border: 1px solid #657ea9;
+}
+.textarea:focus {
+    border: 1px solid #657ea9;
+    /* background: #f7fbff; */
+    /* font-style: italic; */
+}
+.item.selected .textarea{
+    border: 1px solid #1a3a70;
+    background: #e4eaf0;
+}
+.item.selected .circle {
+    background: #a8adb1;
+}
+.item.selected .collapse {
+    border: 1px solid #1a3a70;
+}
+.item.selected .collapse span {
+    color: #1a3a70;
+}
+.item.selected .collapse span.line {
+    background: #1a3a70;
+}
+.item.done{
+    background: #c3ef7c;
+}
+.item.done .textarea{
+    border: 1px solid #60823b;
+    color: #365600;
+    /* background: url('done.png') no-repeat 11px 18px; */
+}
+.item.done .circle {
+    background:#87a557;
+}
+.itemHolder {
+    margin: 10px 0;
+}
+.textarea{
+    padding: 16px 30px;
+    padding-right: 45px;
+    box-sizing: border-box;
+    outline: none;
+    color: #000;
+    font-size: 14px;
+    word-break: break-all;
+    font-family: Arial, Helvetica, sans-serif;
+    position: relative;
+    border-radius: 5px;
+    border: 1px solid #d2d9e2;
+}
+.callMenu{
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    right: 15px;
+    top: 16px;
+    cursor: pointer;
+}
+
+.circle {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #b3b6b9;
+    position: absolute;
+}
+.circle.c1{
+    top: 0;
+    left: 0;
+}
+.circle.c2{
+    top: 0;
+    right: 0;
+}
+.circle.c3{
+    bottom: 0;
+    left: 0;
+}
+.circle.c4{
+    bottom: 0;
+    right: 0;
+}
+
+.progressBar {
+    position: absolute;
+    height: 100%;
+    width: 50%;
+    background: #ddf1f4;
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+}
+.subItemContainer {
+    padding-left: 30px;
+    box-sizing: border-box;
+    border-left: 1px solid #d2d9e2;
+    padding-top: 3px;
+    position: relative;
+    top: -4px;
+}
+.priority {
+    padding-bottom: 37px;
+}
+.priority .item {
+    background: #007bff;
+    /* border: 2px solid #005cbf; */
+    /* border-radius: 5px; */
+}
+.priority .item .textarea{
+    padding: 21px 30px;
+    padding-right: 45px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid #005cbf;
+    
+}
+.priority .item .textarea::selection {
+    background: #000;
+}
+.priority .item .callMenu{
+    right: 20px;
+    top: 22px;
+}
+.priority .item .circle {
+    background: #0050a6;
+}
+h2 {
+    font-size: 24px;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 25px 0 20px 0;
+}
+.tabs {
+    height: 55px;
+    background: #f7f7f7;
+    border-top: 1px solid #dedfde;
+    border-bottom: 1px solid #dedfde;
+    padding: 0 10px;
+    box-sizing: border-box;
+    position: relative;
+}
+.nav-tabs {
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    bottom: -1px;
+}
+.nav-tabs li{
+    display: inline-block;
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 14px 14px 8px 14px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border: 1px solid #dedfde;
+    color: #4a5152;
+    background: #f0f0f0;
+    cursor: pointer;
+    vertical-align: bottom;
+}
+.nav-tabs li:hover{
+    background: #fafafa;
+}
+.nav-tabs li.active{
+    background: #fff;
+    border-bottom-color: #fff;
+    padding: 14px 14px 10px 14px;
+}
+.nav-tabs li.add{
+    padding-top: 8px;
+    padding-bottom: 7px;
+    color: #777f88;
+    background: #efefef;
+    font-weight: bold;
+    font-size: 14px;
+}
+.collapse {
+    height: 16px;
+    min-width: 16px;
+    position: absolute;
+    padding: 0 1px;
+    display: inline-block;
+    left: -7px;
+    top: 17px;
+    background: #fff;
+    border: 1px solid #6d7d92;
+    box-sizing: border-box;
+    text-align: center;
+    cursor: pointer;
+}
+.collapse span{
+    color: #5a687b;
+    font-size: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 12px;
+    vertical-align: top;
+    position: relative;
+    top: 1px;
+    font-weight: bold;
+}
+.collapse span.line{
+    display: inline-block;
+    height: 2px;
+    width: 6px;
+    top: 6px;
+    background: #8593a5;
+}
+.callMenu:hover .menu{
+    display: inline-block;
+}
+.menu {
+    display: none;
+    position: absolute;
+    padding: 5px 20px;
+    right: 3px;
+    top: 3px;
+    background: #fff;
+    border: 2px solid #102953;
+    z-index: 1;
+}
+.menu ul{
+    padding: 0;
+    list-style: none;
+    margin: 0;
+}
+.menu li{
+    white-space: nowrap;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #1a3a70;
+    margin: 10px 0;
+}
+.menu li:hover{
+    text-decoration: underline;
+}
+
+.separator {
+    display: block;
+    height: 1px;
+    border-bottom: 1px dashed #1a3a70;
+    width: 100%;
+    /* background: #1a3a70; */
+}
+
+@media (max-width: 650px) { 
+    .subItemContainer {
+        padding-left: 10px;
+    }
+    .collapse {
+        left: -2px;
+    }
+ }
