@@ -93,6 +93,9 @@ body {
     background: #b3b6b9;
     position: absolute;
 }
+.circle:hover {
+    outline: 1px solid red;
+}
 .circle.c1{
     top: 0;
     left: 0;
@@ -100,14 +103,17 @@ body {
 .circle.c2{
     top: 0;
     right: 0;
+    background: red !important;
 }
 .circle.c3{
     bottom: 0;
     left: 0;
+    background: blue !important;
 }
 .circle.c4{
     bottom: 0;
     right: 0;
+    background: green !important;
 }
 
 .progressBar {

@@ -12,10 +12,11 @@ export class AppComponent implements OnInit, DoCheck {
   sourcedata = {};
   constructor(private dataService: DataService){ }
   ngOnInit(){
-    this.sourcedata = this.dataService.getItems(this.dataService.ignite());
+    let ignitionArray = this.dataService.ignite();
+    this.sourcedata = this.dataService.getItems(ignitionArray);   
   } 
   ngDoCheck(){
-    //console.log('check was done');
-    this.sourcedata = this.dataService.getItems(this.dataService.ignite());
+    let ignitionArray = this.dataService.ignite();
+    this.sourcedata = this.dataService.getItems(ignitionArray);   
   }
 }

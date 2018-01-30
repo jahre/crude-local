@@ -4,7 +4,7 @@
       <div class="callMenu">
           <div class="circle c1" (click)="dataService.addBelow(info.id)"></div>
           <div class="circle c2" (click)="dataService.removeItem(info.id)"></div>
-          <div class="circle c3" ></div>
+          <div class="circle c3" (click)="dataService.setPriorityItem(info.id)"></div>
           <div class="circle c4"(click)="dataService.markDone(info.id)"></div>
       </div>
   </div>

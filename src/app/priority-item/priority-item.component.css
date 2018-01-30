@@ -1,0 +1,17 @@
+/* .priority {
+    background: #fff;
+    position: fixed;
+    z-index: 2;
+} */
+.content {
+    min-height: auto;
+}
+.placeholder {
+    height: 180px;
+}
+.fixedcontainer {
+    width: 100%;
+    position: fixed;
+    width: 100%;
+    z-index: 2;
+}

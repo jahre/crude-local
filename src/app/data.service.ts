@@ -1,6 +1,7 @@
 export class DataService {
     //counter:number = 0;
     allData:any = {};
+    priority:any;
     // allData:any = {
     //     item0: {
     //         id: 'item0',
@@ -32,14 +33,19 @@ export class DataService {
 
     init(){
       //console.log('init is called');
-
-        for(let i=0; i < window.localStorage.length; i++){
-            let item = localStorage.getItem('item' + i);
-            if(item){
-                this.allData['item' + i] = JSON.parse(item);
-                //console.log('item ' + i + ' was taken form localstorage')
+        let ls = window.localStorage;
+        console.log(ls);
+        var re = /^item/;
+        //var found = str.match(re);
+        for(let item in ls){
+            if(item.match(re)){
+                console.log(item);
+                console.log(ls[item]);
+                this.allData[item] = JSON.parse(ls[item]);
             }
+            
         }
+      
         //if localstorage is empty - initialize the root element
         if(this.getDataLength() == 0){
 
@@ -51,6 +57,8 @@ export class DataService {
             localStorage.setItem('item0', JSON.stringify(this.allData['item0']));
 
         }
+
+        
         // let localitem0 = JSON.parse(localStorage.getItem('item0'));
         // let newitem0 = {
         //     id: 'item0',
@@ -80,7 +88,7 @@ export class DataService {
 
     createItem(id, parentId){
         
-        let namedId = 'item' + id;
+        let namedId = 'item' + id + '_' + Math.floor(Math.random() * Math.floor(1000));
         let newItem = {
             id: namedId,
             text: 'child of ' + parentId,
@@ -130,11 +138,18 @@ export class DataService {
         // }
         //return this.allData.[find((item)=>item.id == 'item0')].children;
         this.init();
-        console.log(this.getDataLength())
+        // console.log(this.getDataLength());
+        // console.log(window.localStorage.length);
+        console.log('this.allData');
+        console.log(this.allData);
+        //console.log(this.allData['item0'].children)
         return this.allData['item0'].children;
+        //return null;
+
+        
     }
 
-    getItems(items: [string]){
+    getItems(items: string[]){
         let array = [];
         for(let i=0; i< items.length; i++){
             array.push(this.allData[items[i]]);
@@ -157,5 +172,11 @@ export class DataService {
         this.allData[id].isDone = !this.allData[id].isDone;
         console.log(this.allData[id]);
         localStorage.setItem(id, JSON.stringify(this.allData[id]));
+    }
+
+    setPriorityItem(id:string){
+        console.log('qqq');
+        this.priority = this.allData[id];
+        this.priority.children = [];
     }
 }
