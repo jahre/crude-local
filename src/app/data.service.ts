@@ -34,13 +34,13 @@ export class DataService {
     init(){
       //console.log('init is called');
         let ls = window.localStorage;
-        console.log(ls);
+        //console.log(ls);
         var re = /^item/;
         //var found = str.match(re);
         for(let item in ls){
             if(item.match(re)){
-                console.log(item);
-                console.log(ls[item]);
+                //console.log(item);
+                //console.log(ls[item]);
                 this.allData[item] = JSON.parse(ls[item]);
             }
             
@@ -140,8 +140,8 @@ export class DataService {
         this.init();
         // console.log(this.getDataLength());
         // console.log(window.localStorage.length);
-        console.log('this.allData');
-        console.log(this.allData);
+        //console.log('this.allData');
+        //console.log(this.allData);
         //console.log(this.allData['item0'].children)
         return this.allData['item0'].children;
         //return null;
@@ -168,15 +168,71 @@ export class DataService {
         localStorage.setItem(parentId, JSON.stringify(this.allData[parentId]));
     }
 
-    markDone(id){
+    markDone(id, deep=false){
         this.allData[id].isDone = !this.allData[id].isDone;
-        console.log(this.allData[id]);
+        // if(!deep){
+        //     this.allData[id].isDone = !this.allData[id].isDone;
+        //     console.log('not deep');
+        // }else{
+        //     this.allData[id].isDone = true;
+        //     console.log('deep');
+        // }
+        
+        // if(this.allData[id].children.length > 0){
+        //     for(let i=0; i<this.allData[id].children.length; i++){
+        //         this.markDone(this.allData[id].children[i], true);
+                
+        //     }
+        // }
+        
+        //console.log(this.allData[id]);
         localStorage.setItem(id, JSON.stringify(this.allData[id]));
     }
 
     setPriorityItem(id:string){
-        console.log('qqq');
+        //console.log('qqq');
         this.priority = this.allData[id];
         this.priority.children = [];
+    }
+
+    toggleExpand(id){
+        this.allData[id].isCollapsed = !this.allData[id].isCollapsed;
+        localStorage.setItem(id, JSON.stringify(this.allData[id]));
+    }
+
+    calculateReadiness(id){
+        //return Math.round(Math.random() * 100);
+        let doneChildren;
+        if(this.allData[id].children.length) {   
+            doneChildren = 0;
+        }else {
+            return;
+        }
+        
+        for(let i=0; i<this.allData[id].children.length; i++){
+            let childId = this.allData[id].children[i]
+            //let done = +this.allData[childId].isDone;
+            if(this.allData[childId].isDone == true ){
+                //console.log('doneChildren++')
+                doneChildren++
+            }
+            
+            if(this.allData[childId].children.length > 0 && !(this.allData[childId].isDone == true)){
+                doneChildren += this.calculateReadiness(childId);
+            }
+            //console.log(this.allData[childId].id + 'is done');
+            //console.log(this.allData[childId].isDone);
+        }
+        //return this.allData[id].children.length * 10;
+        //console.log((doneChildren /  this.allData[id].children.length) * 10)
+        if(this.allData[id].children.length){
+            if(doneChildren /  this.allData[id].children.length === 1){
+                //console.log('doneChildren /  this.allData[id].children.length === 1');
+                this.allData[id].isDone = true;
+            }else if(this.allData[id].isDone == true){
+                this.allData[id].isDone = false;
+            }
+        }
+        return doneChildren /  this.allData[id].children.length;
     }
 }

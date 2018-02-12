@@ -30,9 +30,14 @@ export class ItemComponent implements OnInit, DoCheck {
     }
   }
 
+  
+
   getValue(id){
     this.dataService.updateTextValue(id, this.textarea.nativeElement.innerText)
     console.dir(this.textarea.nativeElement.innerText);
   }
 
+  calculateReadiness(id){
+    return this.dataService.calculateReadiness(id) * 100;
+  }
 }

@@ -115,11 +115,17 @@ body {
     right: 0;
     background: green !important;
 }
+.circle.c5{
+    width: 18px;
+    top: -10px;
+    right: 0;
+    background: cyan !important;
+}
 
 .progressBar {
     position: absolute;
     height: 100%;
-    width: 50%;
+    width: 0%;
     background: #ddf1f4;
     border-bottom-left-radius: 4px;
     border-top-left-radius: 4px;
