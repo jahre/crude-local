@@ -1,9 +1,15 @@
 <app-priority-item></app-priority-item>
-<div class="content">
+
+<div class="content" id="app-content">
   <div class="container">
+    <div>
+      <app-zone></app-zone>
+    </div>
+    <hr>
     <div class="main">
         <button (click)="dataService.addToRoot()">Add</button>
-        <app-item [info]="item" *ngFor="let item of sourcedata"></app-item>
+        <button (click)="testMove()">Test Move</button>
+        <app-item [currentId]="item" *ngFor="let item of sourcedata"></app-item>
     </div>
   </div>
 </div>

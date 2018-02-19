@@ -2,6 +2,8 @@ export class DataService {
     //counter:number = 0;
     allData:any = {};
     priority:any;
+    global:any;
+    moveInfo: any = {};
     // allData:any = {
     //     item0: {
     //         id: 'item0',
@@ -32,15 +34,10 @@ export class DataService {
     }
 
     init(){
-      //console.log('init is called');
         let ls = window.localStorage;
-        //console.log(ls);
         var re = /^item/;
-        //var found = str.match(re);
         for(let item in ls){
             if(item.match(re)){
-                //console.log(item);
-                //console.log(ls[item]);
                 this.allData[item] = JSON.parse(ls[item]);
             }
             
@@ -57,28 +54,6 @@ export class DataService {
             localStorage.setItem('item0', JSON.stringify(this.allData['item0']));
 
         }
-
-        
-        // let localitem0 = JSON.parse(localStorage.getItem('item0'));
-        // let newitem0 = {
-        //     id: 'item0',
-        //     children: [],
-        //     totalCount: 0
-        // };
-
-        // if(localitem0){
-        //   //console.log('item0 is taken from localstorage');
-        //   //console.log(localitem0);
-        //     //this.allData[0] = localitem0;
-        //     //this.counter = localitem0.totalCount;
-        // }else {
-        //     // this.allData.push(newitem0);
-        //     // localStorage.setItem('item0', JSON.stringify(newitem0));
-        // }
-        // this.allData.push(newitem0);
-        // this.counter = this.allData[0].totalCount;
-        // localStorage.setItem('item0', JSON.stringify(newitem0));
-      //console.log(this.allData);
     }
 
     updateTextValue(id, text){
@@ -88,10 +63,10 @@ export class DataService {
 
     createItem(id, parentId){
         
-        let namedId = 'item' + id + '_' + Math.floor(Math.random() * Math.floor(1000));
+        let namedId = 'item' + id + '_' + Math.floor(Math.random() * 10000);
         let newItem = {
             id: namedId,
-            text: 'child of ' + parentId,
+            text: namedId,
             children: [],
             parent: parentId
         }
@@ -102,51 +77,75 @@ export class DataService {
         localStorage.setItem(parentId, JSON.stringify(this.allData[parentId]));        
     }
     addToRoot(){
-      //console.log(this.counter)
-        // let counter = this.counter;
-        // let item0 = this.getItem('item0');
-        // let localitem0 = JSON.parse(localStorage.getItem('item0'));
         this.createItem(this.getDataLength(), 'item0');
-
-        // function findFirstLargeNumber(element) {
-        //     return element == counter;
-        // };
-        // let isExists = item0.children.findIndex(findFirstLargeNumber);
-      //console.log(isExists < 0)
-        // if(isExists < 0){
-        //   //console.log('item0 was pushed' + this.counter);
-        //     item0.children.push(this.counter);
-        //     localitem0.children.push(this.counter);
-        // }
-        // localStorage.setItem('item0', JSON.stringify(item0));
-        //this.counter++;
     }
+
     addBelow(id){
         this.createItem(this.getDataLength(), id);
-        // let item = this.getItem(id);
-        // if(!item.children){
-        //     item.children = [];
-        // }
-        //item.children.push(this.counter);
-
-       // this.counter++;
     }  
 
-    ignite(){
-        // if(!this.allData.length){
-        //     this.init();
-        // }
-        //return this.allData.[find((item)=>item.id == 'item0')].children;
-        this.init();
-        // console.log(this.getDataLength());
-        // console.log(window.localStorage.length);
-        //console.log('this.allData');
-        //console.log(this.allData);
-        //console.log(this.allData['item0'].children)
-        return this.allData['item0'].children;
-        //return null;
+    moveInsideAnother(targetId, sourceId){
+        let sourceParent =  this.allData[sourceId].parent;
+        let targetParent =  this.allData[targetId].parent;
+        if(!(targetParent == sourceId)){
+            let parentIndex = this.allData[sourceParent].children.indexOf(sourceId);
+            if (parentIndex !== -1) {
+                this.allData[sourceParent].children.splice(parentIndex, 1);
+            }
 
+            this.allData[sourceId].parent = targetId;
+            this.allData[targetId].children.push(sourceId);
+            localStorage.setItem(sourceParent, JSON.stringify(this.allData[sourceParent]));
+            localStorage.setItem(sourceId, JSON.stringify(this.allData[sourceId]));
+            localStorage.setItem(targetId, JSON.stringify(this.allData[targetId]));     
+        }
+        this.moveInfo = {};
+        console.log('moveInsideAnother fired');
+           
+    }  
+
+    moveBelowAnother(targetId, sourceId){
+        let sourceParent =  this.allData[sourceId].parent;
+        let targetParent =  this.allData[targetId].parent;
+        //console.log(1,'source', sourceId);
+        //console.log(2,'this.allData[sourceParent]', this.allData[sourceParent]);
+        let parentIndex = this.allData[sourceParent].children.indexOf(sourceId);
+        let parentIndex2;
+        for(let i = 0; i < this.allData[sourceParent].children.length; i++){
+            //console.log(3,'length', this.allData[sourceParent].children.length);
+            //console.log(4,this.allData[sourceParent].children[i]);
+            if(this.allData[sourceParent].children[i] == sourceId){
+                parentIndex2 = i;
+            }
+            //console.log(5,parentIndex2, sourceId);
+        }
+        let targetIndex = this.allData[targetParent].children.indexOf(targetId);
         
+        //console.log(6,'original', parentIndex);
+        //console.log(this.allData[sourceParent]);
+        if (parentIndex !== -1) {
+            this.allData[sourceParent].children.splice(parentIndex, 1);
+            //console.log(7,this.allData[sourceParent]);
+        }
+
+        this.allData[targetParent].children.splice(targetIndex + 1, 0, sourceId);
+        this.allData[sourceId].parent = this.allData[targetId].parent;
+        // if(this.allData[targetId].children){
+        //     this.allData[targetId].children
+        // }
+
+        localStorage.setItem(sourceParent, JSON.stringify(this.allData[sourceParent]));
+        localStorage.setItem(targetParent, JSON.stringify(this.allData[targetParent]));
+        localStorage.setItem(sourceId, JSON.stringify(this.allData[sourceId]));
+        localStorage.setItem(targetId, JSON.stringify(this.allData[targetId]));   
+
+        this.moveInfo = {};
+        console.log('moveBelowAnother fired')
+    }
+
+    ignite(){
+        this.init();
+        return this.allData['item0'].children;        
     }
 
     getItems(items: string[]){
@@ -170,27 +169,10 @@ export class DataService {
 
     markDone(id, deep=false){
         this.allData[id].isDone = !this.allData[id].isDone;
-        // if(!deep){
-        //     this.allData[id].isDone = !this.allData[id].isDone;
-        //     console.log('not deep');
-        // }else{
-        //     this.allData[id].isDone = true;
-        //     console.log('deep');
-        // }
-        
-        // if(this.allData[id].children.length > 0){
-        //     for(let i=0; i<this.allData[id].children.length; i++){
-        //         this.markDone(this.allData[id].children[i], true);
-                
-        //     }
-        // }
-        
-        //console.log(this.allData[id]);
         localStorage.setItem(id, JSON.stringify(this.allData[id]));
     }
 
     setPriorityItem(id:string){
-        //console.log('qqq');
         this.priority = this.allData[id];
         this.priority.children = [];
     }
@@ -201,7 +183,6 @@ export class DataService {
     }
 
     calculateReadiness(id){
-        //return Math.round(Math.random() * 100);
         let doneChildren;
         if(this.allData[id].children.length) {   
             doneChildren = 0;
@@ -211,23 +192,16 @@ export class DataService {
         
         for(let i=0; i<this.allData[id].children.length; i++){
             let childId = this.allData[id].children[i]
-            //let done = +this.allData[childId].isDone;
             if(this.allData[childId].isDone == true ){
-                //console.log('doneChildren++')
                 doneChildren++
             }
             
             if(this.allData[childId].children.length > 0 && !(this.allData[childId].isDone == true)){
                 doneChildren += this.calculateReadiness(childId);
             }
-            //console.log(this.allData[childId].id + 'is done');
-            //console.log(this.allData[childId].isDone);
         }
-        //return this.allData[id].children.length * 10;
-        //console.log((doneChildren /  this.allData[id].children.length) * 10)
         if(this.allData[id].children.length){
             if(doneChildren /  this.allData[id].children.length === 1){
-                //console.log('doneChildren /  this.allData[id].children.length === 1');
                 this.allData[id].isDone = true;
             }else if(this.allData[id].isDone == true){
                 this.allData[id].isDone = false;
