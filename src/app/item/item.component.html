@@ -1,4 +1,5 @@
 <div class="itemHolder" #itemholder (mouseup)="onMouseUp($event, info.id)" >
+  <!-- <button (click)="showTruth(info.id)">Show the truth</button> -->
   <div class="item" [ngClass]="{'done': info.isDone}" id="{{info.id}}">
       <div class="progressBar"  [ngStyle]="{'width.%': calculateReadiness(info.id), 'background-color': 'hsl(' + (200 - calculateReadiness(info.id)) + ', 50%, 80%)'}" *ngIf="!info.isDone"></div>
       <div class="textarea" contenteditable="true" #textarea (blur)="getValue(info.id)">{{info.text}}</div>
@@ -9,11 +10,13 @@
       </div>
       <div class="callMenu">
           <div class="circle c1" (click)="dataService.addBelow(info.id)"></div>
-          <div class="circle c2" (click)="dataService.removeItem(info.id)"></div>
+          <div class="circle c2" (click)="dataService.removeItem(info.id, parentId)"></div>
           <div class="circle c3" (click)="dataService.setPriorityItem(info.id)"></div>
           <div class="circle c4" (click)="dataService.markDone(info.id)"></div>
-          <div class="circle c5" (mousedown)="onMouseDown($event)" ></div>
+          <div class="circle c5" (mousedown)="onMouseDown($event, false, parentId)" ></div>
+          <div class="circle c6" (mousedown)="onMouseDown($event, true, parentId)"></div>
       </div>
+      
   </div>
   <div class="zoneContainer">
     <div class="zoneForMove" (mouseover)="onMouseOver($event)" (mouseout)="onMouseOut($event)" (mouseup)="onMouseUp($event, info.id, 'zone')"></div>
@@ -22,7 +25,7 @@
 
 
   <div class="subItemContainer" *ngIf="info.children.length && !info.isCollapsed">
-      <app-item [currentId]="item" *ngFor="let item of sourcedata"></app-item>
+      <app-item [currentId]="item" [parentId]="info.id" *ngFor="let item of sourcedata"></app-item>
   </div>
 </div>
 

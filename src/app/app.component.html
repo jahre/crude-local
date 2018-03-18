@@ -9,7 +9,7 @@
     <div class="main">
         <button (click)="dataService.addToRoot()">Add</button>
         <button (click)="testMove()">Test Move</button>
-        <app-item [currentId]="item" *ngFor="let item of sourcedata"></app-item>
+        <app-item [currentId]="item" [parentId]="'item0'" *ngFor="let item of sourcedata"></app-item>
     </div>
   </div>
 </div>

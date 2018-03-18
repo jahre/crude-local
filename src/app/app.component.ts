@@ -31,7 +31,7 @@ export class AppComponent implements OnInit, DoCheck {
   }
 
   testMove(){
-    this.dataService.moveInsideAnother('item34_473', 'item35_708');
+    //this.dataService.transormParents();
     //item32_153 - target
     //item33_487 - source
   }

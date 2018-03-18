@@ -1,4 +1,6 @@
+import { NgZone as zone} from '@angular/core';
 export class DataService {
+    //constructor(private zone: NgZone) {}
     //counter:number = 0;
     allData:any = {};
     priority:any;
@@ -68,7 +70,7 @@ export class DataService {
             id: namedId,
             text: namedId,
             children: [],
-            parent: parentId
+            parent: [parentId]
         }
         this.allData[namedId] = newItem;
         this.allData[parentId].children.push(namedId);
@@ -84,7 +86,7 @@ export class DataService {
         this.createItem(this.getDataLength(), id);
     }  
 
-    moveInsideAnother(targetId, sourceId){
+    moveInsideAnother(targetId, sourceId, isCopy){
         let sourceParent =  this.allData[sourceId].parent;
         let targetParent =  this.allData[targetId].parent;
         if(!(targetParent == sourceId)){
@@ -99,40 +101,63 @@ export class DataService {
             localStorage.setItem(sourceId, JSON.stringify(this.allData[sourceId]));
             localStorage.setItem(targetId, JSON.stringify(this.allData[targetId]));     
         }
-        this.moveInfo = {};
-        console.log('moveInsideAnother fired');
-           
+        this.moveInfo = {};           
     }  
+
+    moveInsideAnother_extended(targetId:string, sourceId:string, isCopy, immediateParent){
+        let sourceParent =  this.allData[sourceId].parent;
+        let targetParent =  this.allData[targetId].parent;
+        let isElemExistsAlready = this.allData[targetId].children.indexOf(sourceId) > -1;
+
+        if(isCopy){
+            //make conditions as separate variables, as isElemExistsAlready
+            if(!(targetId == sourceParent) && !(sourceId == targetId) && !(sourceParent == targetParent) && !isElemExistsAlready){
+                this.allData[sourceId].parent.push(targetId);
+                this.allData[targetId].children.push(sourceId);
+            }
+        }else{
+            //remove Source from its parent
+            let elemIndex = this.allData[immediateParent].children.indexOf(sourceId);
+            if (elemIndex !== -1) {
+                this.allData[immediateParent].children.splice(elemIndex, 1);
+            }
+            //remove old parent form Source
+            let parentIndex = this.allData[sourceId].parent.indexOf(immediateParent);
+            if (parentIndex !== -1) {
+                this.allData[sourceId].parent.splice(parentIndex, 1);
+            }
+            //add Target as a new parent to Source
+            this.allData[sourceId].parent.push(targetId);
+            //add SourceId to children of Target
+            this.allData[targetId].children.push(sourceId);
+        }
+        localStorage.setItem(immediateParent, JSON.stringify(this.allData[immediateParent]));
+        localStorage.setItem(sourceId, JSON.stringify(this.allData[sourceId]));
+        localStorage.setItem(targetId, JSON.stringify(this.allData[targetId]));     
+        this.moveInfo = {};           
+    }
 
     moveBelowAnother(targetId, sourceId){
         let sourceParent =  this.allData[sourceId].parent;
         let targetParent =  this.allData[targetId].parent;
-        //console.log(1,'source', sourceId);
-        //console.log(2,'this.allData[sourceParent]', this.allData[sourceParent]);
+
         let parentIndex = this.allData[sourceParent].children.indexOf(sourceId);
         let parentIndex2;
         for(let i = 0; i < this.allData[sourceParent].children.length; i++){
-            //console.log(3,'length', this.allData[sourceParent].children.length);
-            //console.log(4,this.allData[sourceParent].children[i]);
+
             if(this.allData[sourceParent].children[i] == sourceId){
                 parentIndex2 = i;
             }
-            //console.log(5,parentIndex2, sourceId);
+
         }
         let targetIndex = this.allData[targetParent].children.indexOf(targetId);
-        
-        //console.log(6,'original', parentIndex);
-        //console.log(this.allData[sourceParent]);
+
         if (parentIndex !== -1) {
             this.allData[sourceParent].children.splice(parentIndex, 1);
-            //console.log(7,this.allData[sourceParent]);
         }
 
         this.allData[targetParent].children.splice(targetIndex + 1, 0, sourceId);
         this.allData[sourceId].parent = this.allData[targetId].parent;
-        // if(this.allData[targetId].children){
-        //     this.allData[targetId].children
-        // }
 
         localStorage.setItem(sourceParent, JSON.stringify(this.allData[sourceParent]));
         localStorage.setItem(targetParent, JSON.stringify(this.allData[targetParent]));
@@ -156,15 +181,42 @@ export class DataService {
         return array;
     }
 
-    removeItem(id: string){    
-        let parentId = this.allData[id].parent;
-        this.allData[id] = null;
-        let parentIndex = this.allData[parentId].children.indexOf(id);
-        if (parentIndex !== -1) {
-            this.allData[parentId].children.splice(parentIndex, 1);
+    removeItem(id: string, immediateParentId: string){
+        let parentIds = this.allData[id].parent;
+        
+        if(parentIds.length > 1){
+            let elemIndex = this.allData[immediateParentId].children.indexOf(id);
+            if (elemIndex !== -1) {
+                console.log('elem index in parent', this.allData[immediateParentId].children, id, elemIndex);
+                this.allData[immediateParentId].children.splice(elemIndex, 1);
+            }
+            let parentIndex = this.allData[id].parent.indexOf(immediateParentId);
+            if (parentIndex !== -1) {
+                console.log('parent index in elem', this.allData[id].parent, immediateParentId, parentIndex);
+                this.allData[id].parent.splice(parentIndex, 1);
+            }
+            localStorage.setItem(immediateParentId, JSON.stringify(this.allData[immediateParentId]));
+            localStorage.setItem(id, JSON.stringify(this.allData[id]));
+            return;
         }
+        let allParentItems = [];
+        for(let parentId of parentIds){
+            //this.allData[id] = null;
+            let parentIndex = this.allData[parentId].children.indexOf(id);
+            if (parentIndex !== -1) {
+                this.allData[parentId].children.splice(parentIndex, 1);
+            }
+            console.log('this.allData[parentId]',this.allData[parentId]);
+            //allParentItems.push(parentId);
+            localStorage.setItem(parentId, JSON.stringify(this.allData[parentId]));
+        }
+        // zone.runOutsideAngular(() => {
+        //     for(let parentId of allParentItems){
+        //         localStorage.setItem(parentId, JSON.stringify(this.allData[parentId]));
+        //     }
+        // });
+
         localStorage.removeItem(id);
-        localStorage.setItem(parentId, JSON.stringify(this.allData[parentId]));
     }
 
     markDone(id, deep=false){

@@ -16,3 +16,8 @@
 .hovered{
     background: rgba(255, 0, 0, 0.2);
 }
+.circle.c6{
+    height: 20px;
+    right: -10px;
+    background: rgb(255, 230, 0);
+}
