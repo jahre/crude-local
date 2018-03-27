@@ -4,7 +4,7 @@ import { DataService } from '../data.service';
 @Component({
   selector: 'app-priority-item',
   templateUrl: './priority-item.component.html',
-  styleUrls: ['./priority-item.component.css']
+  styleUrls: ['./priority-item.component.scss']
 })
 export class PriorityItemComponent implements OnInit, DoCheck {
   priority:any;
@@ -17,7 +17,7 @@ export class PriorityItemComponent implements OnInit, DoCheck {
     this.priority = this.dataService.priority;
   }
   priorityDone(id){
-    this.dataService.markDone(id);
+    this.dataService.markDone(id, null);
     this.dataService.priority = null;
   }
   

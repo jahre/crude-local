@@ -3,7 +3,7 @@ import { Component, OnInit, NgZone } from '@angular/core';
 @Component({
   selector: 'app-zone',
   templateUrl: './zone.component.html',
-  styleUrls: ['./zone.component.css']
+  styleUrls: ['./zone.component.scss']
 })
 export class ZoneComponent implements OnInit {
 

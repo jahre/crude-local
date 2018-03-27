@@ -82,7 +82,8 @@ export class DataService {
         this.createItem(this.getDataLength(), 'item0');
     }
 
-    addBelow(id){
+    addBelow(id, event){
+        event.stopPropagation();
         this.createItem(this.getDataLength(), id);
     }  
 
@@ -168,6 +169,63 @@ export class DataService {
         console.log('moveBelowAnother fired')
     }
 
+    moveBelowAnother_extended(targetId:string, sourceId:string, isCopy, immediateParent, third){
+        let targetParentsArray =  this.allData[targetId].parent;
+        
+        
+        console.log('targetParentsArray', targetParentsArray)
+        for(let targetParent of targetParentsArray){
+            let childIndex = this.allData[targetParent].children.indexOf(targetId);
+            let isElemExistsAlready = this.allData[targetParent].children.indexOf(sourceId) > -1;
+            //console.log('childIndex',childIndex);
+
+            if(isCopy){
+                if(!(sourceId == targetId) && !isElemExistsAlready){
+                    if(third > 0.66){
+                        this.allData[targetParent].children.splice(childIndex + 1, 0, sourceId);
+                    }else{
+                        this.allData[targetParent].children.splice(childIndex, 0, sourceId);
+                    }
+                    this.allData[sourceId].parent.push(targetParent);
+                }
+                
+            }else{
+                if(!(sourceId == targetId )){
+                    //remove Source from its parent
+                    let elemIndex = this.allData[immediateParent].children.indexOf(sourceId);
+                    if (elemIndex !== -1) {
+                        this.allData[immediateParent].children.splice(elemIndex, 1);
+                    }
+                    //remove old parent form Source
+                    let parentIndex = this.allData[sourceId].parent.indexOf(immediateParent);
+                    if (parentIndex !== -1) {
+                        this.allData[sourceId].parent.splice(parentIndex, 1);
+                    }
+
+                    let childIndex2 = this.allData[targetParent].children.indexOf(targetId);
+                    console.log('childIndex', childIndex, childIndex2)
+                    if(third > 0.66){
+                        this.allData[targetParent].children.splice(childIndex + 1, 0, sourceId);
+                    }else{
+                        this.allData[targetParent].children.splice(childIndex, 0, sourceId);
+                    }
+                    this.allData[sourceId].parent.push(targetParent);
+
+                }
+            }
+            localStorage.setItem(immediateParent, JSON.stringify(this.allData[immediateParent]));
+            localStorage.setItem(targetParent, JSON.stringify(this.allData[targetParent]));
+ 
+        }
+        localStorage.setItem(sourceId, JSON.stringify(this.allData[sourceId]));
+        localStorage.setItem(targetId, JSON.stringify(this.allData[targetId])); 
+
+ 
+
+        this.moveInfo = {};
+
+    }
+
     ignite(){
         this.init();
         return this.allData['item0'].children;        
@@ -181,7 +239,8 @@ export class DataService {
         return array;
     }
 
-    removeItem(id: string, immediateParentId: string){
+    removeItem(id: string, immediateParentId: string, event){
+        event.stopPropagation();
         let parentIds = this.allData[id].parent;
         
         if(parentIds.length > 1){
@@ -219,12 +278,14 @@ export class DataService {
         localStorage.removeItem(id);
     }
 
-    markDone(id, deep=false){
+    markDone(id, event){
+        event.stopPropagation();
         this.allData[id].isDone = !this.allData[id].isDone;
         localStorage.setItem(id, JSON.stringify(this.allData[id]));
     }
 
-    setPriorityItem(id:string){
+    setPriorityItem(id:string, event){
+        event.stopPropagation();
         this.priority = this.allData[id];
         this.priority.children = [];
     }
