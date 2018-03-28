@@ -10,13 +10,13 @@ import { DataService } from './data.service';
 export class AppComponent implements OnInit, DoCheck {
   title = 'app';
   sourcedata = {};
-  constructor(private dataService: DataService){}
+  constructor(public dataService: DataService){}
 
   // @HostListener('document:mousemove', ['$event'])
   // handleMouseUp(event: Event) {
   //   console.log(event)
   // }
-
+  
 
   ngOnInit(){
     let ignitionArray = this.dataService.ignite();

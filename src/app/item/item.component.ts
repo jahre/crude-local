@@ -104,7 +104,7 @@ export class ItemComponent implements OnInit, DoCheck{
 
   }
 
-  onMouseUp(event: any, id, zone){
+  onMouseUp(event: any, id){
     event.stopPropagation();
     
     
