@@ -1,19 +1,21 @@
-<div class="placeholder" *ngIf="priority">
+<div class="placeholder" >
     <div class="fixedcontainer">
         <div class="content">
             <div class="container">
                     <div class="priority" >
                         <h2>Priority for now:</h2>
-                        <div class="item" >
+                        <div class="item" *ngIf="priority">
                             <div class="textarea" contenteditable="true">{{priority.text}}</div>
-                            <div class="callMenu">
+                            <div class="callMenu" (click)="priorityDone(priority.id, $event)">
                                 <div class="circle c1"></div>
                                 <div class="circle c2"></div>
                                 <div class="circle c3"></div>
-                                <div class="circle c4" (click)="priorityDone(priority.id)"></div>
+                                <div class="circle c4"></div>
                             </div>
                         </div>
-                        <!-- <app-item [info]="priority" *ngIf="priority"></app-item> -->
+                        <div class="item" *ngIf="!priority" [ngClass]="{'noPriority': !priority}">
+                                <div class="textarea" >Nothing to do. Just relax:)</div>
+                            </div>
                     </div>
             </div>
         </div>

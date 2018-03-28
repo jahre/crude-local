@@ -320,6 +320,7 @@ export class DataService {
                 this.allData[id].isDone = false;
             }
         }
+        localStorage.setItem(id, JSON.stringify(this.allData[id]));
         return doneChildren /  this.allData[id].children.length;
     }
 }

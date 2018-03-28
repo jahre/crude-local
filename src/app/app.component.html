@@ -2,13 +2,12 @@
 
 <div class="content" id="app-content">
   <div class="container">
-    <div>
-      <app-zone></app-zone>
+
+    <div style="padding:20px 0;">
+        <button (click)="dataService.addToRoot()" style="padding:10px; width:100%;">Add</button>
     </div>
-    <hr>
-    <div class="main">
-        <button (click)="dataService.addToRoot()">Add</button>
-        <button (click)="testMove()">Test Move</button>
+
+    <div class="main" style="padding-bottom:50px;">
         <app-item [currentId]="item" [parentId]="'item0'" *ngFor="let item of sourcedata"></app-item>
     </div>
   </div>

@@ -15,6 +15,7 @@ export class ItemComponent implements OnInit, DoCheck{
   @Input() parentId;
   @ViewChild('textarea') textarea: ElementRef;
   @ViewChild('item') item: ElementRef;
+  @ViewChild('menu') menu: ElementRef;
   @ViewChild('itemholder') itemholder: ElementRef;
   info;
   offset;
@@ -29,7 +30,6 @@ export class ItemComponent implements OnInit, DoCheck{
     if(this.info.children){
       this.sourcedata = this.info.children;
     }    
-    //console.log('init');
   }
 
   ngDoCheck(){
@@ -70,23 +70,19 @@ export class ItemComponent implements OnInit, DoCheck{
   }
 
   mouseMove(event) {
-    //console.clear();
     event.preventDefault();
-    this.dataService.global.style.top = event.clientY - this.offset + window.pageYOffset + 5 + 'px';
-    //console.log('this.dataService.global.style.top', this.dataService.global.style.top);
-    //console.log('params', event.clientY, this.offset, window.pageYOffset);
+    this.dataService.global.style.top = event.clientY - this.offset + window.pageYOffset - 15 + 'px';
   }
   
   
 
-  onMouseDown(event: any, isCopy, immediateParent){
+  onMouseDown(event: any, immediateParent){
+    let isCopy = event.altKey;
     this.dataService.global = event.target.closest('.zoneContainer');   
     this.dataService.moveInfo.source = event.target.closest('.item').id;
     this.dataService.moveInfo.isCopy = isCopy;
     this.dataService.moveInfo.immediateParent = immediateParent;
-    
   
-     // console.log('mouse down', this.dataService.moveInfo);
     let newOffset = this.countOffset(this.dataService.global);
     this.offset = newOffset;
     this.zone.runOutsideAngular(() => {
@@ -111,34 +107,25 @@ export class ItemComponent implements OnInit, DoCheck{
   onMouseUp(event: any, id, zone){
     event.stopPropagation();
     
-
-
-    // if(zone == 'zone'){
-
-    //   if(id && this.dataService.moveInfo.source){
-    //     this.dataService.moveBelowAnother(id, this.dataService.moveInfo.source);
-    //   }
-    // }else{
-
-    //   if(id && this.dataService.moveInfo.source){
-    //     this.dataService.moveInsideAnother_extended(id, this.dataService.moveInfo.source, this.dataService.moveInfo.isCopy, this.dataService.moveInfo.immediateParent);
-    //   }
-    // }
-    if(id && this.dataService.moveInfo.source){
-
+    
+    if(id && this.dataService.moveInfo.source && !(id == this.dataService.moveInfo.source)){
       if(this.third < 0.33){
-        console.log(this.third, '1/3');
         this.dataService.moveBelowAnother_extended(id, this.dataService.moveInfo.source, this.dataService.moveInfo.isCopy, this.dataService.moveInfo.immediateParent, this.third);
       }else if(this.third > 0.66){
-        console.log(this.third, '3/3');
         this.dataService.moveBelowAnother_extended(id, this.dataService.moveInfo.source, this.dataService.moveInfo.isCopy, this.dataService.moveInfo.immediateParent, this.third);
 
       }else{
-        console.log(this.third, '2/3');
         if(id && this.dataService.moveInfo.source){
           this.dataService.moveInsideAnother_extended(id, this.dataService.moveInfo.source, this.dataService.moveInfo.isCopy, this.dataService.moveInfo.immediateParent);
         }
 
+      }
+      this.closeMenu();
+    }else if(id == this.dataService.moveInfo.source){
+      if(this.item.nativeElement.classList.contains('isOpen')){
+        this.closeMenu();
+      }else{
+        this.contextMenu(event);
       }
     }
 
@@ -153,15 +140,9 @@ export class ItemComponent implements OnInit, DoCheck{
       // console.log(event.target, 'zone.run');
     });   
 
-    //this.itemHoverListener();
   }
 
   onMouseOver(event: any){
-    //event.target.style.border = "1px solid red";
-    //event.target.classList.add("hovered")
-    //let func = this.onMouseOverMove.bind(this);
-    //console.log('this.itemholder.nativeElement', this.itemholder.nativeElement.id);
-    //this.itemHoverListener = this.renderer.listen(this.itemholder.nativeElement, 'mousemove', func);
     if(this.dataService.moveInfo.source){
       event.currentTarget.classList.add("hovered");
     }
@@ -172,13 +153,10 @@ export class ItemComponent implements OnInit, DoCheck{
 
     
     if(this.dataService.moveInfo.source){
-      //console.clear();
       let item = event.currentTarget;
-      //let x = event.pageX - item.offsetLeft; 
       let y = event.pageY - this.countOffset(item); 
       this.third = y / item.clientHeight;
       if(this.third < 0.33){
-        //console.log(this.third, '1/3');
 
         //remove later!
         event.currentTarget.classList.remove("one-third");
@@ -187,7 +165,6 @@ export class ItemComponent implements OnInit, DoCheck{
 
         item.classList.add("one-third");
       }else if(this.third > 0.66){
-        //console.log(this.third, '3/3');
 
          //remove later!
          event.currentTarget.classList.remove("one-third");
@@ -196,7 +173,6 @@ export class ItemComponent implements OnInit, DoCheck{
 
         item.classList.add("three-third");
       }else{
-        //console.log(this.third, '2/3');
 
          //remove later!
          event.currentTarget.classList.remove("one-third");
@@ -205,9 +181,6 @@ export class ItemComponent implements OnInit, DoCheck{
 
         item.classList.add("two-third");
       }
-
-      //console.log('item params', y, item.clientHeight);
-      //console.dir(item);
     }
 
   }
@@ -217,9 +190,34 @@ export class ItemComponent implements OnInit, DoCheck{
     event.currentTarget.classList.remove("one-third");
     event.currentTarget.classList.remove("three-third");
     event.currentTarget.classList.remove("two-third");
-    //event.target.style.border = "1px solid red";
-    //event.target.classList.remove("hovered");
-    //this.itemHoverListener;
-    //console.log('over', event.target);
   }
+
+  contextMenu(event:any){
+    let allContextMenus = document.getElementsByClassName('isOpen');
+    for(let i=0; i<allContextMenus.length; i++){
+      let menu:any = allContextMenus[i];
+      menu.classList.remove("isOpen");
+    }
+    this.item.nativeElement.classList.add("isOpen");
+  }
+  addBelow(id, $event){
+    this.dataService.addBelow(id, $event);
+    this.closeMenu();
+  }
+  removeItem(id, parentId, $event){
+    this.dataService.removeItem(id, parentId, $event);
+    this.closeMenu();
+  }
+  setPriorityItem(id, $event){
+    this.dataService.setPriorityItem(id, $event);
+    this.closeMenu();
+  }
+  markDone(id, $event){
+    this.dataService.markDone(id, $event);
+    this.closeMenu();
+  }
+  closeMenu(){
+    this.item.nativeElement.classList.remove("isOpen");
+  }
+  
 }

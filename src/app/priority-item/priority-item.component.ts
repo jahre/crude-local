@@ -16,8 +16,8 @@ export class PriorityItemComponent implements OnInit, DoCheck {
   ngDoCheck(){
     this.priority = this.dataService.priority;
   }
-  priorityDone(id){
-    this.dataService.markDone(id, null);
+  priorityDone(id, event){
+    this.dataService.markDone(id, event);
     this.dataService.priority = null;
   }
   

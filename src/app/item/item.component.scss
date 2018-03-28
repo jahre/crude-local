@@ -68,3 +68,49 @@
     bottom: 5px;
     left: -10px;
 }
+.callMenu{
+    //position: relative;
+
+    &:hover{
+        //background: red;
+    }
+}
+.contextMenu {
+    display: none;
+    position: absolute;
+    background:#fff;
+    min-width: 150px;
+    padding:10px;
+    right: 0;
+    z-index: 2;
+    border: 1px solid #1a3a70;
+   
+    ul{
+        margin: 0;
+        padding: 0;
+        li {
+            list-style: none;
+            display: block;
+            padding: 5px 2px;
+            margin: 2px 0;
+            color: #1a3a70;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            &:not(.hr){
+                &:hover{
+                    text-decoration: underline;
+                    background: rgba(0, 0, 0, 0.1);
+                    
+                }
+            }
+            
+        }
+    }
+}
+
+.item.isOpen{
+    .contextMenu{
+        display: block;
+    }
+}

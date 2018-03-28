@@ -56,7 +56,7 @@ body {
 .item.done .textarea{
     border: 1px solid #60823b;
     color: #365600;
-    /* background: url('done.png') no-repeat 11px 18px; */
+    background: url('assets/done.png') no-repeat 11px 18px;
 }
 .item.done .circle {
     background:#87a557;
@@ -69,7 +69,7 @@ body {
     padding-right: 45px;
     box-sizing: border-box;
     outline: none;
-    color: #000;
+    color: #404040;
     font-size: 14px;
     word-break: break-all;
     font-family: Arial, Helvetica, sans-serif;
@@ -94,7 +94,7 @@ body {
     position: absolute;
 }
 .circle:hover {
-    outline: 1px solid red;
+    //outline: 1px solid red;
 }
 .circle.c1{
     top: 0;
@@ -103,23 +103,23 @@ body {
 .circle.c2{
     top: 0;
     right: 0;
-    background: red !important;
+    //background: red !important;
 }
 .circle.c3{
     bottom: 0;
     left: 0;
-    background: blue !important;
+    //background: blue !important;
 }
 .circle.c4{
     bottom: 0;
     right: 0;
-    background: green !important;
+    //background: green !important;
 }
 .circle.c5{
     width: 18px;
     top: -10px;
     right: 0;
-    background: cyan !important;
+    //background: cyan !important;
 }
 
 .progressBar {
