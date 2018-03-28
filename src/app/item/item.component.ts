@@ -120,10 +120,10 @@ export class ItemComponent implements OnInit, DoCheck{
         }
 
       }
-      this.closeMenu();
+        this.closeMenu(event);
     }else if(id == this.dataService.moveInfo.source){
       if(this.item.nativeElement.classList.contains('isOpen')){
-        this.closeMenu();
+        this.closeMenu(event);
       }else{
         this.contextMenu(event);
       }
@@ -200,24 +200,41 @@ export class ItemComponent implements OnInit, DoCheck{
     }
     this.item.nativeElement.classList.add("isOpen");
   }
-  addBelow(id, $event){
-    this.dataService.addBelow(id, $event);
-    this.closeMenu();
+  addBelow(id, event){
+    event.stopPropagation();
+    this.dataService.addBelow(id, event);
+    this.closeMenu(event);
   }
-  removeItem(id, parentId, $event){
-    this.dataService.removeItem(id, parentId, $event);
-    this.closeMenu();
+  removeItem(id, parentId, event){
+    event.stopPropagation();
+    this.dataService.removeItem(id, parentId, event);
+    this.closeMenu(event);
   }
-  setPriorityItem(id, $event){
-    this.dataService.setPriorityItem(id, $event);
-    this.closeMenu();
+  setPriorityItem(id, event){
+    event.stopPropagation();
+    this.dataService.setPriorityItem(id, event);
+    this.closeMenu(event);
   }
-  markDone(id, $event){
-    this.dataService.markDone(id, $event);
-    this.closeMenu();
+  markDone(id, event){
+    event.stopPropagation();
+    this.dataService.markDone(id, event);
+    this.closeMenu(event);
   }
-  closeMenu(){
+  closeMenu(event){
+    event.stopPropagation();
     this.item.nativeElement.classList.remove("isOpen");
   }
-  
+
+  copy(id, immediateParent, isCopy){
+    event.stopPropagation();
+    this.dataService.copyPasteInfo.clickSource = id;
+    this.dataService.copyPasteInfo.immediateParent = immediateParent;
+    this.dataService.copyPasteInfo.isCopy = isCopy;
+    this.closeMenu(event);
+  }
+  paste(id){
+    event.stopPropagation();
+    this.dataService.moveInsideAnother_extended(id, this.dataService.copyPasteInfo.clickSource, this.dataService.copyPasteInfo.isCopy, this.dataService.copyPasteInfo.immediateParent);
+    this.closeMenu(event);
+  }
 }

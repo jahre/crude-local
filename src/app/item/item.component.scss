@@ -74,7 +74,8 @@
     background:#fff;
     min-width: 150px;
     padding:10px;
-    right: 0;
+    right: 50%;
+    top: 50%;
     z-index: 2;
     border: 1px solid #1a3a70;
    
@@ -106,4 +107,12 @@
     .contextMenu{
         display: block;
     }
+}
+
+.contextMenuContainer{
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 50px;
 }

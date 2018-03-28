@@ -26,29 +26,31 @@
                     <span *ngIf="info.isCollapsed">{{info.children.length}}</span>
                 </span>
             </div>
-            <div class="callMenu" >
-                <div (mousedown)="onMouseDown($event, parentId)" style="position: relative; height: 100%;">
-                    <!-- <div class="circle c1" (click)="dataService.addBelow(info.id, $event)"></div>
-                    <div class="circle c2" (click)="dataService.removeItem(info.id, parentId, $event)"></div>
-                    <div class="circle c3" (click)="dataService.setPriorityItem(info.id, $event)"></div>
-                    <div class="circle c4" (click)="dataService.markDone(info.id, $event)"></div> -->
-                    <div class="circle c1"></div>
-                    <div class="circle c2"></div>
-                    <div class="circle c3"></div>
-                    <div class="circle c4"></div>
-                    
-                </div>
-                <div class="contextMenu" id="{{info.id + '_menu'}}"  #menu>
-                    <ul>
-                        <li (click)="addBelow(info.id, $event)">Add Below</li>
-                        <li (click)="removeItem(info.id, parentId, $event)">Remove</li>
-                        <li (click)="setPriorityItem(info.id, $event)">Set Priority</li>
-                        <li (click)="markDone(info.id, $event)">Mark Done</li>
-                        <li *ngIf="info.children.length > 0"  (click)="dataService.toggleExpand(info.id)">Expand / Collapse</li>
-                        <li class="hr"><hr></li>
-                        <li (click)="closeMenu()">Cancel</li>
-                    </ul>
-                </div>
+            <div class="contextMenuContainer">
+                <!-- <div style="position: absolute; height: 100%;"> -->
+                    <div (mousedown)="onMouseDown($event, parentId)" style="position: absolute; height: 100%; width:100%;">
+                        <div class="callMenu">
+                            <div class="circle c1"></div>
+                            <div class="circle c2"></div>
+                            <div class="circle c3"></div>
+                            <div class="circle c4"></div>
+                        </div>                        
+                    </div>
+                    <div class="contextMenu" id="{{info.id + '_menu'}}"  #menu>
+                        <ul>
+                            <li (click)="addBelow(info.id, $event)">Add Below</li>
+                            <li (click)="removeItem(info.id, parentId, $event)">Remove</li>
+                            <li (click)="setPriorityItem(info.id, $event)">Set Priority</li>
+                            <li *ngIf="!info.children.length" (click)="markDone(info.id, $event)">Mark Done</li>
+                            <li *ngIf="info.children.length > 0"  (click)="dataService.toggleExpand(info.id)">Expand / Collapse</li>
+                            <li (click)="copy(info.id, parentId, true)">Copy</li>
+                            <li (click)="copy(info.id, parentId, false)">Cut</li>
+                            <li *ngIf="dataService.copyPasteInfo.clickSource" (click)="paste(info.id)">Paste</li>
+                            <li class="hr"><hr></li>
+                            <li (click)="closeMenu($event)">Cancel</li>
+                        </ul>
+                    </div>
+                <!-- </div> -->
             </div>
             
         </div>

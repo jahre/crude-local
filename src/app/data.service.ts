@@ -6,6 +6,7 @@ export class DataService {
     priority:any;
     global:any;
     moveInfo: any = {};
+    copyPasteInfo: any = {};
     // allData:any = {
     //     item0: {
     //         id: 'item0',
@@ -280,8 +281,10 @@ export class DataService {
 
     markDone(id, event){
         event.stopPropagation();
-        this.allData[id].isDone = !this.allData[id].isDone;
-        localStorage.setItem(id, JSON.stringify(this.allData[id]));
+        if(!(this.allData[id].children.length)){
+            this.allData[id].isDone = !this.allData[id].isDone;
+            localStorage.setItem(id, JSON.stringify(this.allData[id]));
+        }
     }
 
     setPriorityItem(id:string, event){

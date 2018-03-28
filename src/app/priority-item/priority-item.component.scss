@@ -16,8 +16,11 @@
     z-index: 2;
 }
 .noPriority {
-    &.item{
-        //background: #007bff
+    .item{
+        display: none;
+    }
+    .item.dummy{
+        display: block;
         background: none;
     }
     .textarea {
@@ -25,3 +28,9 @@
         border: 1px dashed #aaa;
     }
 }
+
+@media (max-width: 650px) { 
+    .noPriority {
+        display: none;
+    }
+ }
